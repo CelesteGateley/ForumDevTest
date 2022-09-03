@@ -16,6 +16,7 @@ class UserToken extends Model
     protected $keyType = 'string';
 
     protected $casts = ['expiry' => 'integer'];
+    protected $guarded = ['created_at','updated_at'];
 
     public function user(): BelongsTo
     {
@@ -35,6 +36,6 @@ class UserToken extends Model
 
     public function expired(): bool
     {
-        return $this->exires->before(now());
+        return $this->expires->isBefore(now());
     }
 }
