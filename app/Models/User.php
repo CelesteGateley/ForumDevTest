@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -43,8 +44,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    private UserRepository $repository;
+
     public function tokens(): HasMany
     {
         return $this->hasMany(UserToken::class, 'user_id')->orderByDesc('expiry');
+    }
+
+    public function repository(): UserRepository
+    {
+        isset($this->repository) || $this->repository = new UserRepository($this);
+        return $this->repository;
     }
 }
