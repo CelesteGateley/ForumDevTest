@@ -23,8 +23,10 @@ class ForumRepository extends ModelRepository
         return Forum::all();
     }
 
-    public static function create(array $data): Forum
+    public static function create(array $data): ?Forum
     {
+        $found = Forum::where('name', '=', $data['name'])->first();
+        if (isset($found)) return null;
         return Forum::create($data);
     }
 
@@ -33,8 +35,10 @@ class ForumRepository extends ModelRepository
         return $this->forum;
     }
 
-    public function update(array $data): Forum
+    public function update(array $data): ?Forum
     {
+        $found = Forum::where('name', '=', $data['name'])->first();
+        if (isset($found) && $found->id !== $this->forum->id) return null;
         $this->forum->update($data);
         $this->save();
         return $this->get();

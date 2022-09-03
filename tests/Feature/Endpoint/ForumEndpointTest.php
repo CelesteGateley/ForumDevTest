@@ -41,6 +41,8 @@ class ForumEndpointTest extends DatabaseTestCase
         $response->assertStatus(200);
         $forum = Forum::find($response->json('id'));
         $this->assertNotNull($forum);
+        // Should return 409, since a forum with that name exists
+        $this->postJson(route('api.forum.create'), $data)->assertStatus(409);
     }
 
     /**
@@ -51,6 +53,7 @@ class ForumEndpointTest extends DatabaseTestCase
     {
         $token = User::factory()->create()->repository()->getToken()->token;
         $forum = Forum::factory()->create();
+        $forum2 = Forum::factory()->create();
         $data = ['name' => 'Test Name', 'description' => 'Test Description'];
         $this->postJson(route('api.forum.update', ['forum' => $forum->id]))->assertStatus(403);
         $this->postJson(route('api.forum.update', ['forum' => $forum->id]), ['__token' => $token])->assertStatus(422);
@@ -63,5 +66,8 @@ class ForumEndpointTest extends DatabaseTestCase
         $response = $this->postJson(route('api.forum.update', ['forum' => $forum->id]), ['__token' => $token, ...$data]);
         $response->assertStatus(200);
         $response->assertJson($data);
+        // Should return 409, since a forum with that name exists
+        $response = $this->postJson(route('api.forum.update', ['forum' => $forum->id]), ['__token' => $token, 'name' => $forum2->name, 'description' => $forum2->description]);
+        $response->assertStatus(409);
     }
 }

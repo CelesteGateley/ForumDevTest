@@ -21,12 +21,14 @@ class ForumController extends Controller
     public function create(ForumRequest $request)
     {
         $forum = ForumRepository::create($request->getData());
+        if (!isset($forum)) return response()->json(['success' => false, 'message' => 'A forum with that name already exists'], 409);
         return response()->json(['success' => true, 'id' => $forum->id, 'name' => $forum->name, 'description' => $forum->description,]);
     }
 
     public function update(ForumRequest $request, Forum $forum)
     {
-        $forum->repository()->update($request->getData());
+        $forum = $forum->repository()->update($request->getData());
+        if (!isset($forum)) return response()->json(['success' => false, 'message' => 'A forum with that name already exists'], 409);
         return response()->json(['success' => true, 'id' => $forum->id, 'name' => $forum->name, 'description' => $forum->description,]);
     }
 }
