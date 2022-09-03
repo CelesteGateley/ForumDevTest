@@ -64,7 +64,7 @@ class UserRepository extends ModelRepository
         return $this;
     }
 
-    public static function getUserFromToken(string $token): ?User
+    public static function getUserFromToken(?string $token): ?User
     {
         $userToken = UserToken::find($token);
         if (!isset($userToken) || $userToken->expired()) return null;
