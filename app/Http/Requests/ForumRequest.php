@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Forum;
-
-use App\Http\Requests\AuthenticatedRequest;
+namespace App\Http\Requests;
 
 /**
  * @property string $name
  * @property string $description
  */
-class CreateRequest extends AuthenticatedRequest
+class ForumRequest extends AuthenticatedRequest
 {
     public function getData(): array
     {
