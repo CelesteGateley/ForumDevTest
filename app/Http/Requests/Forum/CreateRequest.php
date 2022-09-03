@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Forum;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\AuthenticatedRequest;
 
 /**
  * @property string $name
  * @property string $description
  */
-class CreateRequest extends FormRequest
+class CreateRequest extends AuthenticatedRequest
 {
     public function getData(): array
     {
@@ -28,6 +28,7 @@ class CreateRequest extends FormRequest
         return [
             'name' => 'required|unique:forums,name',
             'description' => 'required',
+            ...parent::rules(),
         ];
     }
 }
