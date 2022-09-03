@@ -3,6 +3,7 @@
 namespace Tests\Feature\Endpoint;
 
 use App\Models\Forum;
+use App\Models\User;
 use Tests\DatabaseTestCase;
 
 class ForumEndpointTest extends DatabaseTestCase
@@ -30,10 +31,12 @@ class ForumEndpointTest extends DatabaseTestCase
      */
     public function testCreateRoute(): void
     {
-        $data = ['name' => 'Test Name', 'description' => 'Test Description'];
-        $this->postJson(route('api.forum.create'))->assertStatus(422);
-        $this->postJson(route('api.forum.create'), ['name' => 'Test Name'])->assertStatus(422);
-        $this->postJson(route('api.forum.create'), ['description' => 'Test Description'])->assertStatus(422);
+        $token = User::factory()->create()->repository()->getToken()->token;
+        $data = ['__token' => $token, 'name' => 'Test Name', 'description' => 'Test Description'];
+        $this->postJson(route('api.forum.create'))->assertStatus(403);
+        $this->postJson(route('api.forum.create'), ['__token' => $token])->assertStatus(422);
+        $this->postJson(route('api.forum.create'), ['__token' => $token, 'name' => 'Test Name'])->assertStatus(422);
+        $this->postJson(route('api.forum.create'), ['__token' => $token, 'description' => 'Test Description'])->assertStatus(422);
         $response = $this->postJson(route('api.forum.create'), $data);
         $response->assertStatus(200);
         $forum = Forum::find($response->json('id'));
