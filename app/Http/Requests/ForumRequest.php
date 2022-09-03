@@ -24,7 +24,7 @@ class ForumRequest extends AuthenticatedRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:forums,name',
+            'name' => 'required',
             'description' => 'required',
             ...parent::rules(),
         ];
