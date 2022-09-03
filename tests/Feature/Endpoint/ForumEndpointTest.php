@@ -23,4 +23,20 @@ class ForumEndpointTest extends DatabaseTestCase
             $this->assertEquals($forum->description, $data['description']);
         }
     }
+
+    /**
+     * @covers \App\Http\Controllers\Api\ForumController::create
+     * @return void
+     */
+    public function testCreateRoute(): void
+    {
+        $data = ['name' => 'Test Name', 'description' => 'Test Description'];
+        $this->postJson(route('api.forum.create'))->assertStatus(422);
+        $this->postJson(route('api.forum.create'), ['name' => 'Test Name'])->assertStatus(422);
+        $this->postJson(route('api.forum.create'), ['description' => 'Test Description'])->assertStatus(422);
+        $response = $this->postJson(route('api.forum.create'), $data);
+        $response->assertStatus(200);
+        $forum = Forum::find($response->json('id'));
+        $this->assertNotNull($forum);
+    }
 }

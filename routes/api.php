@@ -21,5 +21,6 @@ Route::name('api.')->group(function () {
 
     Route::prefix('/forum')->name('forum.')->group(function () {
         Route::get('/', [ForumController::class, 'index'])->name('all');
+        Route::post('/create', [ForumController::class, 'create'])->name('create');
     });
 });
