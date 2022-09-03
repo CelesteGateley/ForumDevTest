@@ -4,9 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Forum;
 use App\Repositories\Abstracts\ModelRepository;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Collection;
 
-class ForumRepository extends ModelRepository#
+class ForumRepository extends ModelRepository
 {
     private Forum $forum;
 
@@ -15,9 +15,17 @@ class ForumRepository extends ModelRepository#
         $this->forum = $forum;
     }
 
-    public static function create(string $name, string $description): Forum
+    /**
+     * @return Collection|Forum[]
+     */
+    public static function all(): Collection|array
     {
-        return Forum::create(['name' => $name, 'description' => $description]);
+        return Forum::all();
+    }
+
+    public static function create(array $data): Forum
+    {
+        return Forum::create($data);
     }
 
     public function get(): Forum
