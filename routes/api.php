@@ -29,6 +29,7 @@ Route::name('api.')->group(function () {
         Route::post('/create', [ForumController::class, 'create'])->name('create');
         Route::prefix('/{forum}')->group(function () {
             Route::post('/update', [ForumController::class, 'update'])->name('update');
+            Route::post('/delete', [ForumController::class, 'delete'])->name('delete');
         });
     });
 });

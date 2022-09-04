@@ -70,4 +70,19 @@ class ForumEndpointTest extends DatabaseTestCase
         $response = $this->postJson(route('api.forum.update', ['forum' => $forum->id]), ['__token' => $token, 'name' => $forum2->name, 'description' => $forum2->description]);
         $response->assertStatus(409);
     }
+
+    /**
+     * @covers \App\Http\Controllers\Api\ForumController::delete
+     * @return void
+     */
+    public function testDeleteRoute(): void
+    {
+        $token = User::factory()->create()->repository()->getToken()->token;
+        $forum = Forum::factory()->create();
+        $this->postJson(route('api.forum.delete', ['forum' => $forum->id]))->assertStatus(403);
+        $response = $this->postJson(route('api.forum.delete', ['forum' => $forum->id]), ['__token' => $token,]);
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true,]);
+        $this->assertModelMissing($forum);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthenticatedRequest;
 use App\Http\Requests\ForumRequest;
 use App\Models\Forum;
 use App\Repositories\ForumRepository;
@@ -30,5 +31,14 @@ class ForumController extends Controller
         $forum = $forum->repository()->update($request->getData());
         if (!isset($forum)) return response()->json(['success' => false, 'message' => 'A forum with that name already exists'], 409);
         return response()->json(['success' => true, 'id' => $forum->id, 'name' => $forum->name, 'description' => $forum->description,]);
+    }
+
+    public function delete(AuthenticatedRequest $request, Forum $forum)
+    {
+        $deleted = $forum->repository()->delete();
+        if (!$deleted) {
+            return response()->json(['success' => false, 'message' => 'Failed to delete forum']);
+        }
+        return response()->json(['success' => true, 'message' => 'Forum deleted successfully']);
     }
 }
