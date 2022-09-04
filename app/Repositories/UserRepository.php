@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Models\UserToken;
 use App\Repositories\Abstracts\ModelRepository;
+use Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Str;
@@ -62,6 +63,15 @@ class UserRepository extends ModelRepository
     {
         $this->user->refresh();
         return $this;
+    }
+
+    public static function login(string $email, string $password): ?User
+    {
+        $user = User::where('email', '=', strtolower($email))->first();
+        if (isset($user) && Hash::check($password, $user->password)) {
+            return $user;
+        }
+        return null;
     }
 
     public static function getUserFromToken(?string $token): ?User

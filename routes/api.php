@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ForumController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::name('api.')->group(function () {
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         return $request->user();
+    });
+
+    Route::prefix('/auth')->name('auth.')->group(function () {
+        Route::post('/login', [UserController::class, 'login'])->name('login');
     });
 
     Route::prefix('/forum')->name('forum.')->group(function () {
