@@ -30,7 +30,7 @@ class UserToken extends Model
 
     public function setExpiresAttribute(Carbon $expires): void
     {
-        $this->expiry = $expires->unix();
+        $this->update(['expiry' => $expires->unix(),]);
         $this->save();
     }
 
