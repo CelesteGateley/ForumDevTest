@@ -8,7 +8,11 @@ use Tests\DatabaseTestCase;
 
 class AuthenticationEndpointTest extends DatabaseTestCase
 {
-    public function testLoginEndpoint()
+    /**
+     * @covers \App\Http\Controllers\Api\UserController::login
+     * @return void
+     */
+    public function testLoginEndpoint(): void
     {
         $user = User::factory()->create();
         $this->postJson(route('api.auth.login'), ['email' => 'test@localhost', 'password' => 'password'])->assertStatus(403);

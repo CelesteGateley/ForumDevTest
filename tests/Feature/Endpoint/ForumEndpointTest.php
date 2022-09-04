@@ -46,7 +46,7 @@ class ForumEndpointTest extends DatabaseTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Api\ForumController::create
+     * @covers \App\Http\Controllers\Api\ForumController::update
      * @return void
      */
     public function testUpdateRoute(): void
